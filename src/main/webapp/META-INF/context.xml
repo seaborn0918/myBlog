@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/">
+    <Resource name="dbcp_mysql"
+              auth="Container"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              type="javax.sql.DataSource"
+              initialSize="0"
+              minIdle="0"
+              maxTotal="20"
+              maxIdle="20"
+              maxWaitMillis="5000"
+              url="jdbc:mysql://localhost:3306/testdb"
+              username="full505"
+              password="full505" />
+</Context>
