@@ -1,0 +1,19 @@
+.category-item:hover{
+    background-color: #e6e6e7;
+    border-radius: 12px;
+}
+.table-fontsize{
+    font-size: 0.9rem;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+
+
