@@ -1,5 +1,6 @@
 <%@ page import="com.bitc.jsp_myblog.model.DBConnPool" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="kr">
 <head>
@@ -24,21 +25,7 @@
 
 </head>
 <body>
-<header>
-  <nav class="navbar navbar-expand-md fixed-top bg-white">
-    <div class="container">
-      <a href="../index.jsp" class="navbar-brand fw-semibold">take your marks</a>
-      <div>
-        <a href="contact.jsp" class="text-decoration-none text-dark fw-bolder me-1">contact</a>
-        <a href="login.jsp" class="text-decoration-none text-dark fw-bolder">login</a>
-      </div>
-    </div>
-  </nav>
-  <div class="header-image py-5">
-  </div>
-</header>
-<h1><%=session.getAttribute("userId")%></h1>
-
+<c:import url="../layout/header.jsp"/>
 <main class="container-md">
   <div class="row">
     <div class="col-md-4 mx-auto mt-5">

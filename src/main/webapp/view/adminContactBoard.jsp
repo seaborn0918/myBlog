@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="kr">
 <head>
@@ -8,27 +9,13 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title><></title>
   <link rel="stylesheet" href="../bootstrap-5.2.3/css/bootstrap.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css">
   <script src="../bootstrap-5.2.3/js/bootstrap.bundle.js"></script>
-  <%--  <style>--%>
-  <%--    * {border: 1px solid salmon}--%>
-  <%--  </style>--%>
 </head>
 <body>
-<header>
-  <nav class="navbar navbar-expand-md fixed-top bg-white">
-    <div class="container">
-      <a href="../index.jsp" class="navbar-brand fw-semibold">take your marks</a>
-      <div>
-        <a href="contact.jsp" class="text-decoration-none text-dark fw-bolder me-1">contact</a>
-        <a href="login.jsp" class="text-decoration-none text-dark fw-bolder">login</a>
-      </div>
-    </div>
-  </nav>
-  <div class="header-image py-5">
-  </div>
-</header>
+<c:import url="../layout/header.jsp"/>
 <main class="container-md mt-3">
   <div class="row d-flex justify-content-center">
     <div class="col-md-10">

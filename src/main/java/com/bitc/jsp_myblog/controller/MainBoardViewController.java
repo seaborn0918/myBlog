@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/view/view.do")
-public class ClickedBoardViewController extends HttpServlet {
+public class MainBoardViewController extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
     int idx = Integer.parseInt(req.getParameter("idx"));
@@ -21,13 +21,13 @@ public class ClickedBoardViewController extends HttpServlet {
 
     List<MyBlogDTO> boardList = dao.selectBoardList();
 
-    // 조회수 업데이트 미구현*********
+    dao.updateBoardVisits(idx);
 
     MyBlogDTO board = dao.selectBoardDetail(idx);
     dao.close();
 
     req.setAttribute("boardList", boardList);
-    req.setAttribute("clickBoardTitle", board);
+    req.setAttribute("mainBoard", board);
     req.getRequestDispatcher("/view/main.jsp").forward(req, resp);
   }
 }

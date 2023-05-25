@@ -18,6 +18,7 @@ public class MyBlogDTO {
   private String postSfile;
   private int postDnCount;
   private int cateNo;
+  private String postCate;
 
   // 방명록
   private int contactIdx;
@@ -140,6 +141,14 @@ public class MyBlogDTO {
     this.cateNo = cateNo;
   }
 
+  public String getPostCate() {
+    return postCate;
+  }
+
+  public void setPostCate(String postCate) {
+    this.postCate = postCate;
+  }
+
   // 방명록 getter, setter
   public int getContactIdx() {
     return contactIdx;
@@ -180,4 +189,5 @@ public class MyBlogDTO {
   public void setContactDate(String contactDate) {
     this.contactDate = contactDate;
   }
+
 }
