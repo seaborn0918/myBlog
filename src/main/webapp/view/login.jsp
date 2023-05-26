@@ -29,6 +29,7 @@
 <main class="container-md">
   <div class="row">
     <div class="col-md-4 mx-auto mt-5">
+      <p class="fs-1 text-center">LOGIN</p>
       <form action="/view/login.do" method="post" class="row g-3">
         <div class="d-grid gap-2">
           <input type="text" id="user-id" name="userId" class="form-control" placeholder="아이디를 입력해주세요" required>

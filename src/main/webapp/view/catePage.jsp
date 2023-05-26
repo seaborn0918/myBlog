@@ -16,9 +16,11 @@
 
   <script>
     $(document).ready(function () {
+      // 로그인 확인
       <c:choose>
       <c:when test="${empty userId}">
       $("#btn-write").hide();
+      $("#empty-btn-write").hide();
       $("#btn-edit").hide();
       $("#btn-delete").hide();
       </c:when>
@@ -26,6 +28,53 @@
       $("#btn-write").show();
       $("#btn-edit").show();
       $("#btn-delete").show();
+      </c:otherwise>
+      </c:choose>
+
+      // 수정, 삭제 : 가장 최신 글 출력 페이지와 제목 클릭 시 출력된 페이지 구분
+      // 수정
+      <c:choose>
+      <c:when test="${not empty cateBoard}">
+      $("#btn-edit").on("click", function () {
+        const postIdx = $("#post-idx").val();
+        const cateNo = $("#cate-no").val();
+        location.href = "/view/edit.do?idx=" + postIdx + "&cateNo=" + cateNo;
+      });
+      </c:when>
+      <c:otherwise>
+      $("#btn-edit").on("click", function () {
+        const postIdx = $("#post-max-idx").val();
+        const cateNo = $("#max-cate-no").val();
+        location.href = "/view/edit.do?idx=" + postIdx + "&cateNo=" + cateNo;
+      });
+      </c:otherwise>
+      </c:choose>
+
+      // 삭제 확인
+      <c:choose>
+      <c:when test="${not empty cateBoard}">
+      $("#btn-delete").on("click", function () {
+        const deleteCheck = confirm("정말 삭제하시겠습니까?");
+        if (deleteCheck) {
+          const postIdx = $("#post-idx").val();
+          const cateNo = $("#cate-no").val();
+          location.href = "/view/delete.do?idx=" + postIdx + "&cateNo=" + cateNo;
+        } else {
+          return false;
+        }
+      });
+      </c:when>
+      <c:otherwise>
+      $("#btn-delete").on("click", function () {
+        const deleteCheck = confirm("정말 삭제하시겠습니까?");
+        if (deleteCheck) {
+          const postIdx = $("#post-max-idx").val();
+          const cateNo = $("#max-cate-no").val();
+          location.href = "/view/delete.do?idx=" + postIdx + "&cateNo=" + cateNo;
+        } else {
+          return false;
+        }
+      });
       </c:otherwise>
       </c:choose>
     });
@@ -71,12 +120,16 @@
           </tbody>
         </table>
       </div>
-      <%--       게시글 내용 --%>
+      <div class="paging text-center my-0">
+        ${pagingBlock}
+      </div>
+      <%-- 게시글 내용 --%>
       <div class="bg-white my-4 p-5 rounded-4">
         <c:choose>
           <c:when test="${empty cateBoardList}">
             <div>게시물이 없음</div>
           </c:when>
+          <%-- 상단의 전체 글 목록에서 제목 클릭했을 시 해당 게시글 출력--%>
           <c:when test="${not empty cateBoard}">
             <div class="article-header">
               <div class="article-title text-center my-3">
@@ -85,7 +138,9 @@
               <div class="writer-info">
                 <span>${cateBoard.getPostWriter()}</span>
                 <br>
+                <input type="hidden" id="post-idx" name="postIdx" value="${cateBoard.getPostIdx()}">
                 <span>글번호 ${cateBoard.getPostIdx()}</span>
+                <input type="hidden" id="cate-no" name="cateNo" value="${cateBoard.getCateNo()}">
                 <span>| ${cateBoard.getPostCate()}</span>
                 <span>| ${cateBoard.getPostDate()}</span>
                 <span>| 조회 ${cateBoard.getPostVisits()}</span>
@@ -95,23 +150,22 @@
             <div class="article-container">
               <p class="pt-3 pb-5">${cateBoard.getPostContent()}</p>
             </div>
-            <c:choose>
-              <c:when test="${empty cateBoard.getPostOfile()}"/>
-              <c:otherwise>
-                <div class="article-file">
-                  <div class="input-group input-group-sm">
-                    <span class="input-group-text">첨부파일</span>
-                    <input type="button" class="form-control text-start" name="postOfile"
-                           value="${cateBoard.getPostOfile()}" readonly
-                           onclick="location.href='/view/download.do?ofile=${cateBoard.getPostOfile()}&sfile=${cateBoard.getPostSfile()}&idx=${cateBoard.getPostIdx()}'">
-                    <input type="hidden" value="${cateBoard.getPostSfile()}">
-                    <span class="input-group-text">다운로드 수</span>
-                    <span class="input-group-text">${cateBoard.getPostDnCount()}</span>
-                  </div>
+            <%-- 첨부파일이 있을 경우에만 화면에 첨부파일 다운로드 출력--%>
+            <c:if test="${not empty cateBoard.getPostOfile()}">
+              <div class="article-file">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">첨부파일</span>
+                  <input type="button" class="form-control text-start" name="postOfile"
+                         value="${cateBoard.getPostOfile()}" readonly
+                         onclick="location.href='/view/download.do?ofile=${cateBoard.getPostOfile()}&sfile=${cateBoard.getPostSfile()}&idx=${cateBoard.getPostIdx()}'">
+                  <input type="hidden" value="${cateBoard.getPostSfile()}">
+                  <span class="input-group-text">다운로드 수</span>
+                  <span class="input-group-text">${cateBoard.getPostDnCount()}</span>
                 </div>
-              </c:otherwise>
-            </c:choose>
+              </div>
+            </c:if>
           </c:when>
+          <%-- (카테고리의 기본화면)카테고리 클릭했을 시 카테고리 글 중 가장 최신 글 출력 --%>
           <c:otherwise>
             <div class="article-header">
               <div class="article-title text-center my-3">
@@ -120,7 +174,9 @@
               <div class="writer-info">
                 <span>${cateMaxPostIdxBoard.getPostWriter()}</span>
                 <br>
+                <input type="hidden" id="post-max-idx" name="postIdx" value="${cateMaxPostIdxBoard.getPostIdx()}">
                 <span>글번호 ${cateMaxPostIdxBoard.getPostIdx()}</span>
+                <input type="hidden" id="max-cate-no" name="maxCateNo" value="${cateMaxPostIdxBoard.getCateNo()}">
                 <span>| ${cateMaxPostIdxBoard.getPostCate()}</span>
                 <span>| ${cateMaxPostIdxBoard.getPostDate()}</span>
                 <span>| 조회 ${cateMaxPostIdxBoard.getPostVisits()}</span>
@@ -130,30 +186,42 @@
             <div class="article-container">
               <p class="pt-3 pb-5">${cateMaxPostIdxBoard.getPostContent()}</p>
             </div>
-            <c:choose>
-              <c:when test="${empty cateMaxPostIdxBoard.getPostOfile()}"/>
-              <c:otherwise>
-                <div class="article-file">
-                  <div class="input-group input-group-sm">
-                    <span class="input-group-text">첨부파일</span>
-                    <input type="button" class="form-control text-start" name="postOfile"
-                           value="${cateMaxPostIdxBoard.getPostOfile()}" readonly
-                           onclick="location.href='/view/download.do?ofile=${cateMaxPostIdxBoard.getPostOfile()}&sfile=${cateMaxPostIdxBoard.getPostSfile()}&idx=${cateMaxPostIdxBoard.getPostIdx()}'">
-                    <input type="hidden" value="${cateMaxPostIdxBoard.getPostSfile()}">
-                    <span class="input-group-text">다운로드 수</span>
-                    <span class="input-group-text">${cateMaxPostIdxBoard.getPostDnCount()}</span>
-                  </div>
+            <c:if test="${not empty cateMaxPostIdxBoard.getPostOfile()}">
+              <div class="article-file">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">첨부파일</span>
+                  <input type="button" class="form-control text-start" name="postOfile"
+                         value="${cateMaxPostIdxBoard.getPostOfile()}" readonly
+                         onclick="location.href='/view/download.do?ofile=${cateMaxPostIdxBoard.getPostOfile()}&sfile=${cateMaxPostIdxBoard.getPostSfile()}&idx=${cateMaxPostIdxBoard.getPostIdx()}'">
+                  <input type="hidden" value="${cateMaxPostIdxBoard.getPostSfile()}">
+                  <span class="input-group-text">다운로드 수</span>
+                  <span class="input-group-text">${cateMaxPostIdxBoard.getPostDnCount()}</span>
                 </div>
-              </c:otherwise>
-            </c:choose>
+              </div>
+            </c:if>
           </c:otherwise>
         </c:choose>
       </div>
-      <div class="mb-5 text-end">
-        <a href="/view/write.do?cateNo=${cateNo}" id="btn-write" class="btn btn-sm btn-primary">글쓰기</a>
-        <a href="#" id="btn-edit" class="btn btn-sm btn-dark">수정</a>
-        <a href="#" id="btn-delete" class="btn btn-sm btn-secondary">삭제</a>
-      </div>
+      <c:choose>
+        <c:when test="${empty cateBoardList}">
+          <div class="article-bottom-button mb-5 row">
+            <div class="col-sm">
+              <a href="/view/write.do?cateNo=${cateNo}" id="empty-btn-write" class="btn btn-sm btn-primary">글쓰기</a>
+            </div>
+          </div>
+        </c:when>
+        <c:otherwise>
+          <div class="article-bottom-button mb-5 row">
+            <div class="col-sm">
+              <a href="/view/write.do?cateNo=${cateNo}" id="btn-write" class="btn btn-sm btn-primary">글쓰기</a>
+            </div>
+            <div class="col-sm d-flex justify-content-end">
+              <button type="button" id="btn-edit" class="btn btn-sm btn-dark me-2">수정</button>
+              <button type="button" id="btn-delete" class="btn btn-sm btn-secondary">삭제</button>
+            </div>
+          </div>
+        </c:otherwise>
+      </c:choose>
     </div>
     <div class="col-md-2"></div>
   </div>

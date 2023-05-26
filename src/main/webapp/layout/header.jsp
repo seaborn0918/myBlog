@@ -30,11 +30,11 @@
 <header>
   <nav class="navbar navbar-expand-md fixed-top bg-white">
     <div class="container">
-      <a href="/view/main.do" class="navbar-brand fw-semibold px-2">take your marks</a>
+      <a href="/view/main.do" class="navbar-brand fw-semibold px-2">나의 개발학습일지</a>
       <div>
-        <span id="welcome-msg" class="navbar-text">${userName}님, 반갑습니다.</span>
+        <span id="welcome-msg" class="navbar-text">공부 중인 ${userName}</span>
         <a href="<c:url value="/view/adminContactBoard.jsp"/>" id="btn-admin-contact"
-           class="text-decoration-none fw-bolder nav-text px-2 py-2">방명록 게시판</a>
+           class="text-decoration-none fw-bolder nav-text px-2 py-2">contact-list</a>
         <a href="contact.jsp" id="btn-contact"
            class="text-decoration-none fw-bolder nav-text px-2 py-2">contact</a>
         <a href="login.jsp" id="btn-login" class="text-decoration-none fw-bolder nav-text px-2 py-2">login</a>

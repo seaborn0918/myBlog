@@ -41,10 +41,3 @@ footer {
     font-size: small;
     text-align: end;
 }
-
-
-.pagingNum:hover{
-    color: white;
-    background-color: black;
-}
-

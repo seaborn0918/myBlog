@@ -21,6 +21,7 @@ public class MainBoardViewController extends HttpServlet {
 
     List<MyBlogDTO> boardList = dao.selectBoardList();
 
+    // 조회수 업데이트
     dao.updateBoardVisits(idx);
 
     MyBlogDTO board = dao.selectBoardDetail(idx);

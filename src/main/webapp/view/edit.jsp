@@ -16,7 +16,7 @@
 
   <script>
     $(document).ready(function () {
-      $("#btn-cancel").on("click", function (){
+      $("#btn-cancel").on("click", function () {
         history.back();
       })
     });
@@ -25,23 +25,40 @@
 <body>
 <c:import url="../layout/header.jsp"/>
 <main class="container-md my-3">
-  <div class="row d-flex justify-content-center">
+  <div class="row d-flex justify-content-center my-5">
     <div class="col-md-8">
-      <%-- 글쓰기 페이지 --%>
-      <form action="/view/write.do" method="post" enctype="multipart/form-data">
-        <div class="input-group my-3">
+      <form action="/view/edit.do" method="post" enctype="multipart/form-data">
+        <div class="input-group mt-3">
           <select class="form-select form-select-sm" name="cateBox">
             <c:forEach items="${category}" var="category" varStatus="loop">
               <option value="${category.cateNo}">${category.postCate}</option>
             </c:forEach>
           </select>
-          <input type="text" class="form-control w-75" id="title" name="title" placeholder="제목을 입력하세요" required>
+          <input type="text" class="form-control w-75" id="title" name="title" value="${cateBoard.getPostTitle()}"
+                 placeholder="제목을 입력하세요" required>
+        </div>
+        <hr>
+        <div class="writer-info">
+          <span>${cateBoard.getPostWriter()}</span>
+          <br>
+          <input type="hidden" id="post-idx" name="idx" value="${cateBoard.getPostIdx()}">
+          <span>글번호 ${cateBoard.getPostIdx()}</span>
+          <span>| ${cateBoard.getPostCate()}</span>
+          <span>| ${cateBoard.getPostDate()}</span>
+          <span>| 조회 ${cateBoard.getPostVisits()}</span>
         </div>
         <hr>
         <div class="my-3">
-          <textarea name="content" id="content" rows="20" class="form-control" placeholder="글내용을 입력하세요" required></textarea>
+          <textarea name="content" id="content" rows="20" class="form-control" placeholder="글내용을 입력하세요"
+                    required>${cateBoard.getPostContent()}</textarea>
+          <c:if test="${not empty cateBoard.getPostOfile()}">
+            <div class="input-group input-group-sm mt-1">
+              <span class="input-group-text">첨부파일</span>
+              <input type="text" class="form-control text-start" value="${cateBoard.getPostOfile()}" readonly>
+            </div>
+          </c:if>
         </div>
-        <div class="input-group my-1 write-file">
+        <div class="input-group">
           <span class="input-group-text">첨부파일</span>
           <input type="file" class="form-control" id="file" name="file">
         </div>

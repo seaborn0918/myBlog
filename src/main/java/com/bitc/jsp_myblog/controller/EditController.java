@@ -11,54 +11,48 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet("/view/write.do")
-public class WriteController extends HttpServlet {
-  // 글쓰기 버튼 클릭시 get 방식으로 write.do
+@WebServlet("/view/edit.do")
+public class EditController extends HttpServlet {
+  // 글읽기 페이지에서 수정 버튼 클릭 시
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String cateNoStr = req.getParameter("cateNo");
+    int postIdx = Integer.parseInt(req.getParameter("idx"));
+    // int cateNo = Integer.parseInt(req.getParameter("cateNo"));
 
-    // 메인 페이지에서 글쓰기 버튼 누를 때는 카테고리 번호 넘기지 않음
-    if (cateNoStr==null){
-      req.getRequestDispatcher("/view/write.jsp").forward(req, resp);
-    } else {
-      int cateNo = Integer.parseInt(req.getParameter("cateNo"));
-      MyBlogDAO dao = new MyBlogDAO();
-      List<MyBlogDTO> cateList = dao.getCategory();
-      dao.close();
-      req.setAttribute("cateNo", cateNo);
-      req.setAttribute("category", cateList);
-      req.getRequestDispatcher("/view/write.jsp").forward(req, resp);
-    }
+    MyBlogDAO dao = new MyBlogDAO();
+    MyBlogDTO board = dao.selectBoardDetail(postIdx);
+    List<MyBlogDTO> cateList = dao.getCategory();
+    dao.close();
+
+    req.setAttribute("cateBoard", board);
+    req.setAttribute("category", cateList);
+    req.getRequestDispatcher("/view/edit.jsp").forward(req, resp);
   }
 
-  // 글 등록 버튼 클릭 시
+  // 수정페이지에서 글 등록 버튼 클릭 시
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    HttpSession session = req.getSession();
-    String userName = (String) session.getAttribute("userName");
 
     String saveDir = "C:\\upload";
     int maxSize = 10 * 10224 * 1024;
     MultipartRequest mr = FileUtils.uploadFile(req, saveDir, maxSize);
     if (mr == null){
-      JSFunc.alertLocation(resp, "첨부 파일의 크기가 큽니다.", "/view/write.do");
+      JSFunc.alertLocation(resp, "첨부 파일의 크기가 큽니다.", "/view/edit.do");
       return;
     }
 
     MyBlogDTO board = new MyBlogDTO();
     board.setCateNo(Integer.parseInt(mr.getParameter("cateBox")));
     board.setPostTitle(mr.getParameter("title"));
-    board.setPostWriter(userName);
     board.setPostContent(mr.getParameter("content"));
-    // 파일 이름
+    board.setPostIdx(Integer.parseInt(mr.getParameter("idx")));
     String fileName = mr.getFilesystemName("file");
     if(fileName != null){
       String now = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
@@ -74,16 +68,12 @@ public class WriteController extends HttpServlet {
     }
 
     MyBlogDAO dao = new MyBlogDAO();
-
-    int result = dao.insertBoard(board);
+    int result = dao.updateBoard(board);
     dao.close();
-
-    if(result == 1) {
-      JSFunc.alertLocation(resp, "글이 등록되었습니다.", "/view/catePage.do?cateNo=" + board.getCateNo());
-      // resp.sendRedirect("/view/catePage.do?cateNo=" + board.getCateNo());
+    if (result == 1) {
+      JSFunc.alertLocation(resp, "수정되었습니다.", "/view/catePage.do?cateNo=" + board.getCateNo());
     } else {
       JSFunc.alertBack("잘못된 입력입니다.", resp);
-      // resp.sendRedirect("/view/write.do?cateNo=" + board.getCateNo());
     }
   }
 }

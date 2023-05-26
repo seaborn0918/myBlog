@@ -20,17 +20,17 @@
   <div class="row d-flex justify-content-center">
     <div class="col-md-8">
       <form action="adminContactBoard.jsp">
-        <div class="my-3">
-          <label for="">이름</label>
-          <input type="text" class="form-control">
+        <div class="form-floating my-3">
+          <input type="text" id="guest-name" class="form-control" placeholder="이름을 입력하세요" required>
+          <label for="guest-name">이름을 입력하세요</label>
         </div>
-        <div class="my-3">
-          <label for="">이메일</label>
-          <input type="text" class="form-control">
+        <div class="form-floating my-3">
+          <input type="email" id="guest-email" class="form-control" placeholder="이메일을 입력하세요" required>
+          <label for="guest-email">이메일을 입력하세요</label>
         </div>
-        <div class="my-3">
-          <label for="">내용</label>
-          <textarea name="" id="" rows="10" class="form-control"></textarea>
+        <div class="form-floating my-3">
+          <textarea name="" id="guest-content" rows="10" class="form-control" style="height: 20rem" required placeholder="내용을 입력하세요"></textarea>
+          <label for="guest-content">내용을 입력하세요</label>
         </div>
         <div class="text-end my-3">
           <button type="submit" class="btn btn-dark">전송</button>
