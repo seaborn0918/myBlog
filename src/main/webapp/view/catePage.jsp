@@ -90,7 +90,15 @@
     <div class="col-md-8">
       <%-- 상단 게시글 목록 --%>
       <div class="board-list">
-        <table class="table table-sm table-hover table-fontsize">
+        <table class="table table-sm table-hover table-fontsize caption-top">
+          <c:choose>
+            <c:when test="${not empty cateBoard}">
+              <caption>${cateBoard.getPostCate()} - 총 ${totalCateCount}개의 글이 있습니다.</caption>
+            </c:when>
+            <c:otherwise>
+              <caption>${cateMaxPostIdxBoard.getPostCate()} - 총 ${totalCateCount}개의 글이 있습니다.</caption>
+            </c:otherwise>
+          </c:choose>
           <colgroup>
             <col style="width: 75%">
             <col style="width: 25%">
@@ -109,7 +117,7 @@
                 <tr>
                   <td class="text-start text-nowrap">
                     <a id="board-title"
-                       href="<c:url value="/view/cateView.do?idx=${item.postIdx}&cateNo=${item.cateNo}"/>"
+                       href="<c:url value="/view/cateView.do?idx=${item.postIdx}&cateNo=${item.cateNo}&pageNum=${pageNum}"/>"
                        class="text-decoration-none text-dark">${item.postTitle}</a>
                   </td>
                   <td class="text-end text-nowrap">${item.postDate}</td>
@@ -124,7 +132,7 @@
         ${pagingBlock}
       </div>
       <%-- 게시글 내용 --%>
-      <div class="bg-white my-4 p-5 rounded-4">
+      <div class="bg-white my-3 p-4 rounded-4">
         <c:choose>
           <c:when test="${empty cateBoardList}">
             <div>게시물이 없음</div>

@@ -35,7 +35,7 @@
       // 수정, 삭제 : 가장 최신 글 출력 페이지와 제목 클릭 시 출력된 페이지 구분
       // 수정
       <c:choose>
-      <c:when test="${not empty cateBoard}">
+      <c:when test="${not empty mainBoard}">
       $("#btn-edit").on("click", function () {
         const postIdx = $("#post-idx").val();
         const cateNo = $("#cate-no").val();
@@ -47,6 +47,33 @@
         const postIdx = $("#post-max-idx").val();
         const cateNo = $("#max-cate-no").val();
         location.href = "/view/edit.do?idx=" + postIdx + "&cateNo=" + cateNo;
+      });
+      </c:otherwise>
+      </c:choose>
+
+      // 삭제 확인
+      <c:choose>
+      <c:when test="${not empty mainBoard}">
+      $("#btn-delete").on("click", function () {
+        const deleteCheck = confirm("정말 삭제하시겠습니까?");
+        if (deleteCheck) {
+          const postIdx = $("#post-idx").val();
+          location.href = "/view/delete.do?idx=" + postIdx
+        } else {
+          return false;
+        }
+      });
+      </c:when>
+      <c:otherwise>
+      $("#btn-delete").on("click", function () {
+        const deleteCheck = confirm("정말 삭제하시겠습니까?");
+        if (deleteCheck) {
+          const postIdx = $("#post-max-idx").val();
+          const cateNo = $("#max-cate-no").val();
+          location.href = "/view/delete.do?idx=" + postIdx;
+        } else {
+          return false;
+        }
       });
       </c:otherwise>
       </c:choose>
@@ -63,7 +90,8 @@
     <div class="col-md-8">
       <%-- 상단 게시글 목록 --%>
       <div class="board-list">
-        <table class="table table-sm table-hover table-fontsize mb-1">
+        <table class="table table-sm table-hover table-fontsize caption-top">
+          <caption>- 총 ${totalCount}개의 글이 있습니다.</caption>
           <colgroup>
             <col style="width: 75%">
             <col style="width: 25%">
@@ -81,7 +109,7 @@
               <c:forEach items="${boardList}" var="item" varStatus="loop">
                 <tr>
                   <td class="text-start text-nowrap">
-                    <a id="board-title" href="/view/view.do?idx=${item.postIdx}"
+                    <a id="board-title" href="/view/view.do?idx=${item.postIdx}&pageNum=${pageNum}"
                        class="text-decoration-none text-dark">${item.postTitle}</a>
                   </td>
                   <td class="text-end text-nowrap">${item.postDate}</td>
@@ -93,7 +121,7 @@
         </table>
       </div>
       <div class="paging text-center my-0">
-        ${pagingImg}
+        ${pagingBlock}
       </div>
       <%-- 게시글 내용 --%>
       <div class="bg-white my-3 p-4 rounded-4">
@@ -113,7 +141,6 @@
                 <input type="hidden" id="post-idx" name="postIdx" value="${mainBoard.getPostIdx()}">
                 <span>글번호 ${mainBoard.getPostIdx()}</span>
                 <input type="hidden" id="cate-no" name="cateNo" value="${mainBoard.getCateNo()}">
-                <span>| ${mainBoard.getPostCate()}</span>
                 <span>| ${mainBoard.getPostDate()}</span>
                 <span>| 조회 ${mainBoard.getPostVisits()}</span>
               </div>
@@ -149,7 +176,6 @@
                 <input type="hidden" id="post-max-idx" name="postIdx" value="${maxPostIdxBoard.getPostIdx()}">
                 <span>글번호 ${maxPostIdxBoard.getPostIdx()}</span>
                 <input type="hidden" id="max-cate-no" name="maxCateNo" value="${maxPostIdxBoard.getCateNo()}">
-                <span>| ${maxPostIdxBoard.getPostCate()}</span>
                 <span>| ${maxPostIdxBoard.getPostDate()}</span>
                 <span>| 조회 ${maxPostIdxBoard.getPostVisits()}</span>
               </div>

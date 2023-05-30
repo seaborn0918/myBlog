@@ -71,7 +71,7 @@ public class EditController extends HttpServlet {
     int result = dao.updateBoard(board);
     dao.close();
     if (result == 1) {
-      JSFunc.alertLocation(resp, "수정되었습니다.", "/view/catePage.do?cateNo=" + board.getCateNo());
+      JSFunc.alertLocation(resp, "수정되었습니다.", "/view/cateView.do?idx=" + board.getPostIdx() +"&cateNo=" + board.getCateNo());
     } else {
       JSFunc.alertBack("잘못된 입력입니다.", resp);
     }

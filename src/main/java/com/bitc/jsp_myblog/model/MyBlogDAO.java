@@ -98,7 +98,7 @@ public class MyBlogDAO extends DBConnPool {
     return boardList;
   }
 
-  // 페이징 처리 블로그 전체 게시물 목록 가져오기
+  // 페이징 처리 위한 블로그 전체 게시물 목록 가져오기
   public List<MyBlogDTO> selectBoardList(int startNum, int postSize) {
     List<MyBlogDTO> boardList = new ArrayList<>();
     String sql = "SELECT post_idx, post_title, post_writer, post_content, post_date, post_visits, post_ofile, post_sfile, post_dn_count, cate_no ";
@@ -460,7 +460,7 @@ public class MyBlogDAO extends DBConnPool {
     return result;
   }
 
-  // 카테고리 정보
+  // 카테고리 정보(번호, 이름)
   public List<MyBlogDTO> getCategory() {
     List<MyBlogDTO> cateList = new ArrayList<>();
     String sql = "SELECT cate_no, post_cate FROM blog_category ";

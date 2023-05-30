@@ -44,10 +44,12 @@ public class MainController extends HttpServlet {
     MyBlogDTO maxPostIdxBoard = dao.selectMaxPostIdxBoard();
     dao.close();
 
-    String pagingImg = PagingBlock.pagingStr(totalCount, pageSize, blockPage, pageNum, "/view/main.do");
+    String pagingBlock = PagingBlock.pagingStr(totalCount, pageSize, blockPage, pageNum, "/view/main.do");
     req.setAttribute("boardList", boardList);
-    req.setAttribute("pagingImg", pagingImg);
+    req.setAttribute("pagingBlock", pagingBlock);
     req.setAttribute("maxPostIdxBoard", maxPostIdxBoard);
+    req.setAttribute("totalCount", totalCount);
+    req.setAttribute("pageNum", pageNum);
     req.getRequestDispatcher("/view/main.jsp").forward(req, resp);
   }
 }

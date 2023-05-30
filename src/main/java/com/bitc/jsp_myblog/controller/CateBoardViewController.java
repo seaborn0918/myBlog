@@ -22,7 +22,8 @@ public class CateBoardViewController extends HttpServlet {
     MyBlogDAO dao = new MyBlogDAO();
 
     // 페이징 처리
-    int totalCount = dao.totalCateCount(cateNo); // 해당 카테고리 게시물 수
+    int totalCount = dao.totalCount();
+    int totalCateCount = dao.totalCateCount(cateNo); // 해당 카테고리 게시물 수
     int pageSize = 5; // 현재 페이지에서 출력할 최대 게시물 수
     int blockPage = 5; // 블록에서 표현할 페이지 수
     int pageNum = 1; // 현재 페이지 수 기본값
@@ -42,12 +43,15 @@ public class CateBoardViewController extends HttpServlet {
     MyBlogDTO cateBoard = dao.selectBoardDetail(postIdx);
     dao.close();
 
-    String pagingBlock = PagingBlock.catePagingStr(totalCount, pageSize, blockPage, pageNum, "/view/catePage.do?cateNo=" + cateNo);
+    String pagingBlock = PagingBlock.catePagingStr(totalCateCount, pageSize, blockPage, pageNum, "/view/catePage.do?cateNo=" + cateNo);
 
     req.setAttribute("cateBoardList", cateBoardList);
     req.setAttribute("pagingBlock", pagingBlock);
     req.setAttribute("cateBoard", cateBoard);
     req.setAttribute("cateNo", cateNo);
+    req.setAttribute("pageNum", pageNum);
+    req.setAttribute("totalCount", totalCount);
+    req.setAttribute("totalCateCount", totalCateCount);
     req.getRequestDispatcher("/view/catePage.jsp").forward(req, resp);
   }
 }

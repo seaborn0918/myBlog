@@ -23,20 +23,13 @@ public class WriteController extends HttpServlet {
   // 글쓰기 버튼 클릭시 get 방식으로 write.do
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String cateNoStr = req.getParameter("cateNo");
 
-    // 메인 페이지에서 글쓰기 버튼 누를 때는 카테고리 번호 넘기지 않음
-    if (cateNoStr==null){
-      req.getRequestDispatcher("/view/write.jsp").forward(req, resp);
-    } else {
-      int cateNo = Integer.parseInt(req.getParameter("cateNo"));
-      MyBlogDAO dao = new MyBlogDAO();
-      List<MyBlogDTO> cateList = dao.getCategory();
-      dao.close();
-      req.setAttribute("cateNo", cateNo);
-      req.setAttribute("category", cateList);
-      req.getRequestDispatcher("/view/write.jsp").forward(req, resp);
-    }
+    // 카테고리 출력 위한 db 연결
+    MyBlogDAO dao = new MyBlogDAO();
+    List<MyBlogDTO> cateList = dao.getCategory();
+    dao.close();
+    req.setAttribute("category", cateList);
+    req.getRequestDispatcher("/view/write.jsp").forward(req, resp);
   }
 
   // 글 등록 버튼 클릭 시
@@ -48,7 +41,7 @@ public class WriteController extends HttpServlet {
     String saveDir = "C:\\upload";
     int maxSize = 10 * 10224 * 1024;
     MultipartRequest mr = FileUtils.uploadFile(req, saveDir, maxSize);
-    if (mr == null){
+    if (mr == null) {
       JSFunc.alertLocation(resp, "첨부 파일의 크기가 큽니다.", "/view/write.do");
       return;
     }
@@ -60,7 +53,7 @@ public class WriteController extends HttpServlet {
     board.setPostContent(mr.getParameter("content"));
     // 파일 이름
     String fileName = mr.getFilesystemName("file");
-    if(fileName != null){
+    if (fileName != null) {
       String now = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
       String ext = fileName.substring(fileName.lastIndexOf("."));
       String newFileName = now + ext;
@@ -78,12 +71,10 @@ public class WriteController extends HttpServlet {
     int result = dao.insertBoard(board);
     dao.close();
 
-    if(result == 1) {
+    if (result == 1) {
       JSFunc.alertLocation(resp, "글이 등록되었습니다.", "/view/catePage.do?cateNo=" + board.getCateNo());
-      // resp.sendRedirect("/view/catePage.do?cateNo=" + board.getCateNo());
     } else {
       JSFunc.alertBack("잘못된 입력입니다.", resp);
-      // resp.sendRedirect("/view/write.do?cateNo=" + board.getCateNo());
     }
   }
 }

@@ -66,7 +66,7 @@
         <div class="mt-3 mb-5">
           <div class="row">
             <div class="col-sm d-grid">
-              <button type="submit" class="btn btn-dark">글 등록</button>
+              <button type="submit" class="btn btn-dark">수정</button>
             </div>
             <div class="col-sm d-grid">
               <button type="reset" class="btn btn-secondary" id="btn-cancel">취소</button>

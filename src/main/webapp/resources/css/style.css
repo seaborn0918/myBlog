@@ -1,18 +1,8 @@
-:root {
-    --header-height: 96px;
-    --footer-height: 178.828px;
-}
-
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
-
-/*main {*/
-/*    min-height: calc(100vh - (var(--header-height) + var(--footer-height)));*/
-/*    margin-bottom: auto;*/
-/*}*/
 
 footer {
     margin-top: auto;
