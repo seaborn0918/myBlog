@@ -135,7 +135,7 @@
       <div class="bg-white my-3 p-4 rounded-4">
         <c:choose>
           <c:when test="${empty cateBoardList}">
-            <div>게시물이 없음</div>
+            <div></div>
           </c:when>
           <%-- 상단의 전체 글 목록에서 제목 클릭했을 시 해당 게시글 출력--%>
           <c:when test="${not empty cateBoard}">

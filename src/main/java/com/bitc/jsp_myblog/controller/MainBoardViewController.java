@@ -35,7 +35,7 @@ public class MainBoardViewController extends HttpServlet {
     int end = pageNum * pageSize;
     //
 
-    List<MyBlogDTO> boardList = dao.selectBoardList(start, pageSize); // 페이징 처리 카테 목록
+    List<MyBlogDTO> boardList = dao.selectBoardList(start, pageSize); // 페이징 처리 목록
     dao.updateBoardVisits(idx); // 조회수 업데이트
 
     MyBlogDTO board = dao.selectBoardDetail(idx);
